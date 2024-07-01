@@ -8,4 +8,4 @@ WORKDIR /app
 COPY ./target/backend-*.jar ./app.jar
 EXPOSE 80
 EXPOSE 443
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+ENTRYPOINT ["java","-jar","/app.jar"]
