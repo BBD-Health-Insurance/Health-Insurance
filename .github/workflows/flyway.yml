@@ -9,6 +9,7 @@ on:
     paths:
       - 'database/**'
       - '.github/workflows/flyway.yml'
+      - 'flyway.conf'
 
   workflow_dispatch:
 
