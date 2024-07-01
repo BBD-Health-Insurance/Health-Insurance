@@ -5,11 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddCoverPlanDto {
-    
-    private String status;
+public class PersonaInformationDto {
+
+    private List<ResponseStatusDto> dependents;
+    private List<ResponseStatusDto> newAdults;
+    private List<ResponseStatusDto> deaths;
 }
