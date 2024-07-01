@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.health_insurance.backend.repository.CoverPlanRepository;
 import com.health_insurance.backend.repository.DependentRepository;
-import com.health_insurance.backend.dto.AddCoverPlanDto;
+import com.health_insurance.backend.dto.ResponseStatusDto;
 import com.health_insurance.backend.dto.DependentDto;
 import com.health_insurance.backend.model.Dependent;
 import com.health_insurance.backend.model.CoverPlan;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,21 +40,21 @@ public class DependentController {
     }
 
     @PostMapping("/add-dependent")
-    public ResponseEntity<List<AddCoverPlanDto>> addDependent(@RequestBody List<Map<String, Object>> request) {
-        List<AddCoverPlanDto> responseList = new ArrayList<>();
+    public ResponseEntity<List<ResponseStatusDto>> addDependent(@RequestBody List<Map<String, Object>> request) {
+        List<ResponseStatusDto> responseList = new ArrayList<>();
 
         try {
             for (Map<String, Object> dependentData: request) {
                 try {
                     String dependentIDStr = (String) dependentData.get("childID");
-                    Long dependentID = Long.valueOf(dependentIDStr);
+                    BigInteger dependentID = new BigInteger(dependentIDStr);
 
                     String parentIDStr = (String) dependentData.get("parentID");
-                    Long parentID = Long.valueOf(parentIDStr);
+                    BigInteger parentID = new BigInteger(parentIDStr);
 
                     Optional<CoverPlan> parentPlanOptional = coverPlanRepository.findByPersonaID(parentID);
                     if (!parentPlanOptional.isPresent()) {
-                        responseList.add(new AddCoverPlanDto("unsuccessful"));
+                        responseList.add(new ResponseStatusDto("unsuccessful"));
                         continue;
                     }
 
@@ -65,11 +66,11 @@ public class DependentController {
 
                     dependentRepository.save(dependent);
 
-                    responseList.add(new AddCoverPlanDto("successful"));
+                    responseList.add(new ResponseStatusDto("successful"));
                 } catch (Exception e) {
                     e.printStackTrace();
 
-                    responseList.add(new AddCoverPlanDto("unsuccessful"));
+                    responseList.add(new ResponseStatusDto("unsuccessful"));
                 }
             }
             return new ResponseEntity<>(responseList, HttpStatus.OK);

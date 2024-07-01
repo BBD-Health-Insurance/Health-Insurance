@@ -24,6 +24,7 @@ import com.health_insurance.backend.model.MaxCover;
 import com.health_insurance.backend.model.Status;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -68,7 +69,7 @@ public class ClaimHistoryController {
                 
                 try {
                     String personaIDStr = (String) claimData.get("personaID");
-                    Long personaID = Long.valueOf(personaIDStr);
+                    BigInteger personaID = new BigInteger(personaIDStr);
 
                     Optional<CoverPlan> coverPlanOptional = coverPlanRepository.findByPersonaID(personaID);
                     if (!coverPlanOptional.isPresent()) {
