@@ -1,9 +1,5 @@
--- Database: HealthInsurance
-use master;
-go
-
-DROP DATABASE IF EXISTS HealthInsurance;
-go
-
-CREATE DATABASE HealthInsurance;
-go
+IF DB_ID('HealthInsurance') IS NULL
+BEGIN
+    CREATE DATABASE HealthInsurance;
+END
+GO
