@@ -8,21 +8,30 @@ on:
       - Alex/Terraform
     paths:
       - 'database/**'
+      - '.github/workflows/flyway.yml'
 
   workflow_dispatch:
 
+env:
+  FLYWAY_VERSION: 9.16.3
+
 jobs:
-  test-migrations:
-    name: Test flyway migration scripts
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Update
-        run: sudo apt update
-      - name: install snapd
-        run: sudo apt install snapd
-      - name: Install Flyway 
-        run: sudo snap install flyway
-      - name: Run flyway
-        run: flyway migrate -password=${{ secrets.DB_PASSWORD }}
+    - uses: actions/checkout@v3
+
+    - name: Setup Flyway
+      run: |
+        wget -qO- https://download.red-gate.com/maven/release/org/flywaydb/enterprise/flyway-commandline/${{ env.FLYWAY_VERSION }}/flyway-commandline-${{ env.FLYWAY_VERSION }}-linux-x64.tar.gz | tar -xvz && sudo ln -s `pwd`/flyway-${{ env.FLYWAY_VERSION }}/flyway /usr/local/bin 
+
+    - name: Run Flyway Migrations
+      env:
+        FLYWAY_URL: ${{ secrets.DB_CONNECTION_STRING }}
+        FLYWAY_USER: ${{ secrets.DB_USERNAME }}
+        FLYWAY_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      run: |
+        flyway repair -X -locations=sql/
+        flyway info -X -locations=sql/
+        flyway migrate -X -locations=sql/
