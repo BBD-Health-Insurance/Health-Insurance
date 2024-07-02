@@ -15,9 +15,10 @@ import com.health_insurance.backend.repository.StatusRepository;
 import com.health_insurance.backend.model.CoverPlan;
 import com.health_insurance.backend.model.Dependent;
 import com.health_insurance.backend.model.Status;
-import com.health_insurance.backend.dto.AddCoverPlanDto;
+import com.health_insurance.backend.dto.ResponseStatusDto;
 import com.health_insurance.backend.dto.CoverPlanDto;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +44,8 @@ public class CoverPlanController {
     }
 
     @PostMapping("/create-plan")
-    public ResponseEntity<List<AddCoverPlanDto>> addCoverPlan(@RequestBody List<Map<String, Object>> request) {
-        List<AddCoverPlanDto> responseList = new ArrayList<>();
+    public ResponseEntity<List<ResponseStatusDto>> addCoverPlan(@RequestBody List<Map<String, Object>> request) {
+        List<ResponseStatusDto> responseList = new ArrayList<>();
 
         try {
             Status activeStatus = statusRepository.findByName("Active");
@@ -55,7 +56,7 @@ public class CoverPlanController {
             for (Map<String, Object> personaData: request) {
                 try {
                     String personaIDStr = (String) personaData.get("personaID");
-                    Long personaID = Long.valueOf(personaIDStr);
+                    BigInteger personaID = new BigInteger(personaIDStr);
     
                     CoverPlan coverPlan = new CoverPlan();
                     coverPlan.setPersonaID(personaID);
@@ -66,7 +67,7 @@ public class CoverPlanController {
                     List<String> dependents = (List<String>) personaData.get("dependents");
                     if (dependents != null) {
                         for (String dependentIDStr: dependents) {
-                            Long dependentID = Long.valueOf(dependentIDStr);
+                            BigInteger dependentID = new BigInteger(dependentIDStr);
         
                             Dependent dependent = new Dependent();
                             dependent.setPersonaID(dependentID);
@@ -76,11 +77,11 @@ public class CoverPlanController {
                         }
                     }
 
-                    responseList.add(new AddCoverPlanDto("successful"));
+                    responseList.add(new ResponseStatusDto("successful"));
                 } catch (Exception e) {
                     e.printStackTrace();
 
-                    responseList.add(new AddCoverPlanDto("unsuccessful"));
+                    responseList.add(new ResponseStatusDto("unsuccessful"));
                 }
                 
             }

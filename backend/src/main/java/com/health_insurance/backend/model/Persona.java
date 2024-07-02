@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 @Entity
@@ -20,7 +21,7 @@ public class Persona {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long personaID;
+    private BigInteger personaID;
 
     @Column(name = "username", nullable = false, length = 100)
     private String username;
