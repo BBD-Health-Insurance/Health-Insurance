@@ -4,8 +4,8 @@ services:
     build:
       context: ./
       dockerfile: ./Dockerfile
-    container_name: health-insurance-api
+    container_name: health-insurance-frontend
     environment:
       NODE_ENV: production
     ports:
-      - 80:80
+      - 443:443
