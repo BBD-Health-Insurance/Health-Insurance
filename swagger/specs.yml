@@ -42,6 +42,11 @@ paths:
                     status:
                       type: string
                       example: successful
+                    reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
         '400':
           description: Unsuccessful operation
           content:
@@ -54,6 +59,11 @@ paths:
                     status:
                       type: string
                       example: unsuccessful
+                    reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
         '500':
           description: Server error
           content:
@@ -64,6 +74,11 @@ paths:
                   status:
                     type: string
                     example: error
+                  reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
         '401':
           description: Unauthorized
           content:
@@ -74,6 +89,11 @@ paths:
                   status:
                     type: string
                     example: unauthorized
+                  reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
       security:
         - api_key: []
   /add-dependent:
@@ -108,6 +128,11 @@ paths:
                   status:
                     type: string
                     example: successful
+                  reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
         '400':
           description: Unsuccessful operation
           content:
@@ -118,6 +143,11 @@ paths:
                   status:
                     type: string
                     example: unsuccessful
+                  reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
         '500':
           description: Server error
           content:
@@ -128,6 +158,11 @@ paths:
                   status:
                     type: string
                     example: error
+                  reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
         '401':
           description: Unauthorized
           content:
@@ -138,6 +173,11 @@ paths:
                   status:
                     type: string
                     example: unauthorized
+                  reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
       security:
         - api_key: []
   /pay-claim:
@@ -181,6 +221,11 @@ paths:
                       type: number
                       format: float
                       example: 1500.00
+                    reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
         '400':
           description: Unsuccessful operation
           content:
@@ -193,6 +238,11 @@ paths:
                     status:
                       type: string
                       example: unsuccessful
+                    reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
         '500':
           description: Server error
           content:
@@ -203,6 +253,11 @@ paths:
                   status:
                     type: string
                     example: error
+                  reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
         '401':
           description: Unauthorized
           content:
@@ -213,12 +268,17 @@ paths:
                   status:
                     type: string
                     example: unauthorized
+                  reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
       security:
         - api_key: []
   /persona-information:
     post:
       summary: Get Persona Information
-      description: This endpoint will be used by the persona team to give us daily information on the personas. This will include information of when persona's become adults and when they die.
+      description: This endpoint will be used by the persona team to give us daily information on the personas. This will include information of when personas die, give birth, and become adults.
       operationId: getPersonaInformation
       requestBody:
         required: true
@@ -227,8 +287,36 @@ paths:
             schema:
               type: object
               properties:
-                TBD:
-                  type: string
+                children:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      parentA:
+                        type: number
+                        example: 1
+                      parentB:
+                        type: number
+                        example: 2
+                      child:
+                        type: number
+                        example: 3
+                adults:
+                  type: array
+                  items:
+                    type: number
+                    example: [4, 5, 6]
+                deaths:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      deceased:
+                        type: number
+                        example: 7
+                      nextOfKin:
+                        type: number
+                        example: 8
               required:
                 - TBD
       responses:
@@ -242,6 +330,11 @@ paths:
                   status:
                     type: string
                     example: successful
+                  reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
         '400':
           description: Unsuccessful operation
           content:
@@ -252,6 +345,11 @@ paths:
                   status:
                     type: string
                     example: unsuccessful
+                  reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
         '500':
           description: Server error
           content:
@@ -262,6 +360,11 @@ paths:
                   status:
                     type: string
                     example: error
+                  reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
         '401':
           description: Unauthorized
           content:
@@ -272,6 +375,11 @@ paths:
                   status:
                     type: string
                     example: unauthorized
+                  reason:
+                      type: array
+                      items:
+                        type: string
+                        example: [Reason 1, Reason 2]
       security:
         - api_key: []
 components:
