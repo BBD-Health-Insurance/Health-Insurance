@@ -8,12 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor 
 @AllArgsConstructor
 @Table(name = "ClaimHistory")
 public class ClaimHistory {
@@ -33,9 +34,8 @@ public class ClaimHistory {
     private BigDecimal amountPaid;
 
     @Column(name = "claimPersonaID", nullable = false)
-    private Long claimPersonaID;
+    private BigInteger claimPersonaID;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "timeStamp", nullable = false, updatable = false, columnDefinition = "default CURRENT_TIMESTAMP")
+    @Column(name = "timeStamp")
     private Date timeStamp;
 }

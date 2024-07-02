@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigInteger;
+
 @Entity
 @Getter
 @Setter
@@ -13,6 +15,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(name = "Dependent")
 public class Dependent {
+
+    public Dependent(CoverPlan coverPlan, BigInteger personaID){
+        this.coverPlan = coverPlan;
+        this.personaID = personaID;
+    }
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,5 +30,5 @@ public class Dependent {
     private CoverPlan coverPlan;
 
     @Column(name = "personaID", nullable = false)
-    private Long personaID;
+    private BigInteger personaID;
 }
