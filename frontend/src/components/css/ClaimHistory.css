@@ -1,35 +1,59 @@
+/* src/css/ClaimHistory.css */
+
 .claim-history-container {
   font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
 }
 
-.claim-history-container h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
 .claim-history-table {
-  width: 90%;
-  margin: 0 auto;
+  width: 100%;
   border-collapse: collapse;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
 }
 
 .claim-history-table th, .claim-history-table td {
-  padding: 12px;
   border: 1px solid #ddd;
+  padding: 8px;
   text-align: left;
 }
 
 .claim-history-table th {
-  background-color: #f4f4f4;
+  cursor: pointer;
+  position: relative;
 }
 
-.claim-history-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+.claim-history-table th.ascending::after {
+  content: ' \2191'; /* Up arrow */
 }
 
-.claim-history-table tr:hover {
-  background-color: #f1f1f1;
+.claim-history-table th.descending::after {
+  content: ' \2193'; /* Down arrow */
+}
+
+.arrow {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8em;
+}
+
+.arrow::after {
+  content: '';
+  display: inline-block;
+  margin-left: 5px;
+  border-width: 5px;
+  border-style: solid;
+}
+
+.arrow.ascending::after {
+  border-color: transparent transparent #000;
+  border-width: 0 5px 5px;
+}
+
+.arrow.descending::after {
+  border-color: #000 transparent transparent;
+  border-width: 5px 5px 0;
 }

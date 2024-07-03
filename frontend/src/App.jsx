@@ -1,21 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Navbar } from './adminPortal/NavBar';
-import { PersonaPlan, ClaimHistory, StockShares, Tax, Welcome } from './components';
+import { Navbar } from './navBar';
+import { PersonaPlan, ClaimHistory, StockShares, Welcome, Home, ProtectedRoute } from './components';
 
 const App = () => {
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const onSignIn = () => {
+    setIsAuthenticated(true);
+  }
+
+  const onSignOut = () => {
+    setIsAuthenticated(false);
+  }
+
 
   return (
     <BrowserRouter>
       <div>
 
-        <Navbar />
+        <Navbar
+          isAuthenticated={isAuthenticated}
+          onSignIn={onSignIn}
+          onSignOut={onSignOut}/>
 
         <div className="content">
           <Routes>
             <Route path="/persona-plan" element={<PersonaPlan/>} />
             <Route path="/claim-history" element={<ClaimHistory/>} />
             <Route path="/stock-shares" element={<StockShares/>} />
+            <Route path="/home" element={<Home/>} />
             <Route path="/" element={<Welcome/>} />
           </Routes>
         </div>
