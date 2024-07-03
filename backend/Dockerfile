@@ -6,6 +6,7 @@ WORKDIR /app
 RUN apk add maven
 
 COPY pom.xml .
+COPY .ebextensions .
 
 RUN mvn dependency:go-offline
 
