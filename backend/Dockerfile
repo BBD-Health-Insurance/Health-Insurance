@@ -4,7 +4,7 @@ COPY pom.xml .
 COPY src ./src
 COPY target ./target
 RUN apk add maven
-RUN mvn clean install -DskipTests
+RUN mvn clean package -DskipTests
 WORKDIR /app
 COPY target/*.jar app.jar
 EXPOSE 80
