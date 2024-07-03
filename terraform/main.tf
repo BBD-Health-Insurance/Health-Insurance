@@ -1,7 +1,7 @@
 
 resource "aws_s3_bucket" "bucket" {
-  bucket = "${var.project_name}-docker-image-1475"
-  tags   = merge(var.mandatory_tags, { Name = "${var.project_name}-docker-image-1475" })
+  bucket = "${var.project_name}-portal-deployments"
+  tags   = merge(var.mandatory_tags, { Name = "${var.project_name}-portal-deployments" })
 }
 
 resource "aws_s3_bucket_versioning" "bucket_versioning" {
