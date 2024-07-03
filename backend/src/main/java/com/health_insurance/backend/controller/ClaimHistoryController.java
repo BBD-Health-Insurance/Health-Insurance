@@ -2,8 +2,8 @@ package com.health_insurance.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +33,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ClaimHistoryController {
 
     @Autowired
@@ -66,7 +67,7 @@ public class ClaimHistoryController {
             BigDecimal maxCoverAmount = maxCoverOptional.get().getMaxCover();
 
             for (Map<String, Object> claimData: request) {
-                
+
                 try {
                     String personaIDStr = (String) claimData.get("personaID");
                     BigInteger personaID = new BigInteger(personaIDStr);
@@ -81,7 +82,7 @@ public class ClaimHistoryController {
                         Dependent dependent = dependentOptional.get();
                         coverPlanOptional = Optional.of(dependent.getCoverPlan());
                     }
-                    
+
                     CoverPlan coverPlan = coverPlanOptional.get();
                     Status coverPlanStatus = coverPlan.getStatus();
                     if (coverPlanStatus == null || !"Active".equals(coverPlanStatus.getName())) {

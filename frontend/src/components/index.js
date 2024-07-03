@@ -1,5 +1,4 @@
 export * from './ClaimHistory';
-export * from './PersonaPlan';
-export * from './StockShares';
-export * from './Tax';
+export * from './Home';
+export * from './ProtectedRoute';
 export * from './Welcome';
