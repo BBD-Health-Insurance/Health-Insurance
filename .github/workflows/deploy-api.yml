@@ -29,21 +29,21 @@ jobs:
         role-session-name: deploy-backend-session
         aws-region: ${{secrets.AWS_REGION}}
 
-    - name: Generate .env
+    - name: Generate env.properties
       run: |
           cd backend
-          echo "PORT_LOCAL=80" > .env 
-          echo "MODE=production" >> .env
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME}}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD}}" >> .env
-          echo "DB_NAME=${{ secrets.DB_NAME}}" >> .env
-          echo "DB_ENDPOINT=${{ secrets.DB_ENDPOINT}}" >> .env
-          echo "AWS_REGION=${{ secrets.AWS_REGION}}" >> .env
-          echo "PORTAL_URL=${{secrets.PORTAL_URL}}" >> .env
-          echo "API_URL=${{secrets.API_URL}}" >> .env
+          echo "PORT_LOCAL=80" > env.properties 
+          echo "MODE=production" >> env.properties
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME}}" >> env.properties
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD}}" >> env.properties
+          echo "DB_NAME=${{ secrets.DB_NAME}}" >> env.properties
+          echo "DB_ENDPOINT=${{ secrets.DB_ENDPOINT}}" >> env.properties
+          echo "AWS_REGION=${{ secrets.AWS_REGION}}" >> env.properties
+          echo "PORTAL_URL=${{secrets.PORTAL_URL}}" >> env.properties
+          echo "API_URL=${{secrets.API_URL}}" >> env.properties
 
     - name: Package artifact
-      run: zip -r ./backend.zip .env .dockerignore *
+      run: zip -r ./backend.zip env.properties .dockerignore *
       working-directory: backend
 
     - name: list files
