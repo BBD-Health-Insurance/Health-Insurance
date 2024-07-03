@@ -60,13 +60,6 @@ public class SimulationController {
                     );
                 }
             }
-            else {
-                reasons.add("Action was not 'reset' or 'start'");
-                return new ResponseEntity<>(
-                        new ResponseStatusDto(ResponseStatusDto.responseUnsuccessful, reasons),
-                        HttpStatus.INTERNAL_SERVER_ERROR
-                );
-            }
 
             reasons.add("Simulation " + action + "ed");
             return new ResponseEntity<>(new ResponseStatusDto(ResponseStatusDto.responseSuccessful, reasons), HttpStatus.OK);
