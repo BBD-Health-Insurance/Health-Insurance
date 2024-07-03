@@ -47,7 +47,9 @@ export const Welcome = () => {
 
   return (
     <div>
-      <h1>Welcome! Please log in!</h1>
+      <h1>Welcome!</h1>
+      <br></br>
+      <h3>Please log in to see further content</h3>
       {error && <p>Failed to authenticate. Please try again.</p>}
     </div>
   );

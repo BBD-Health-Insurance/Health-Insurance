@@ -4,7 +4,7 @@ export const Home = () => {
 
   return (
     <div>
-      <h1>Home Page!</h1>
+      <h1>Welcome to the health insurance admin portal!</h1>
     </div>
   );
 };

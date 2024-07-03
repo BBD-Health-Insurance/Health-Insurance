@@ -53,6 +53,8 @@ export const ClaimHistory = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
+  console.log(sortedData);
+
   return (
     <div className="claim-history-container">
       <h1>Claim History</h1>

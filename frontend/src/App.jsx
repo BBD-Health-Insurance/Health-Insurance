@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './navBar';
-import { PersonaPlan, ClaimHistory, StockShares, Welcome, Home, ProtectedRoute } from './components';
+import { ClaimHistory, Welcome, Home, ProtectedRoute } from './components';
 
 const App = () => {
 
@@ -27,9 +27,7 @@ const App = () => {
 
         <div className="content">
           <Routes>
-            <Route path="/persona-plan" element={<PersonaPlan/>} />
             <Route path="/claim-history" element={<ClaimHistory/>} />
-            <Route path="/stock-shares" element={<StockShares/>} />
             <Route path="/home" element={<Home/>} />
             <Route path="/" element={<Welcome/>} />
           </Routes>

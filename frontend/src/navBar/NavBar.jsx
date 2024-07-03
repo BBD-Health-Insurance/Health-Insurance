@@ -33,9 +33,7 @@ export const Navbar = () => {
         {isAuthenticated && (
           <>
             <li><Link to="/home">Home</Link></li>
-            <li><Link to="/persona-plan">Persona Plan</Link></li>
             <li><Link to="/claim-history">Claim History</Link></li>
-            <li><Link to="/stock-shares">Stock Shares</Link></li>
           </>
         )}
 
