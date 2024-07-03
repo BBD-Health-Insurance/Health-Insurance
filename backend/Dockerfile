@@ -1,12 +1,26 @@
+# Stage 1: Build the application
 FROM amazoncorretto:21-alpine-jdk as BUILD
+
 WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-COPY target ./target
+
 RUN apk add maven
-RUN mvn clean package -DskipTests
+
+COPY pom.xml .
+
+RUN mvn dependency:go-offline
+
+COPY src ./src
+RUN mvn package -DskipTests
+
+FROM amazoncorretto:21-alpine-jdk
+
 WORKDIR /app
-COPY target/*.jar app.jar
-EXPOSE 80
+
+COPY src/main/resources/application.properties ./application.properties
+COPY env.properties ./env.properties
+
+COPY --from=BUILD /app/target/*.jar app.jar
+
 EXPOSE 443
-ENTRYPOINT ["java","-jar","app.jar"]
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
