@@ -8,7 +8,7 @@ export const ClaimHistory = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
 
   useEffect(() => {
-    fetch('http://localhost:8080/list-claimhistory')
+    fetch(`${import.meta.env.VITE_APP_API_URL}/list-claimhistory`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -52,8 +52,6 @@ export const ClaimHistory = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
-
-  console.log(sortedData);
 
   return (
     <div className="claim-history-container">

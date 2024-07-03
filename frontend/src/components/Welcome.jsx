@@ -11,7 +11,7 @@ export const Welcome = () => {
     const code = queryParameters.get('code');
 
     if (code) {
-      fetch('http://localhost:8080/auth', {
+      fetch(`${import.meta.env.VITE_APP_API_URL}/auth`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Base64;
 
 @RestController
-@CrossOrigin(origins = "*") // Allow CORS for all origins
+@CrossOrigin(origins = "http://localhost:3000") // Allow CORS for all origins
 public class AuthController {
 
     @Value("${cognito.clientId}")
@@ -33,6 +33,9 @@ public class AuthController {
 
     @Value("${cognito.domain}")
     private String domain;
+
+    @Value("${frontendUri}")
+    private String frontendUri;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -55,7 +58,7 @@ public class AuthController {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("grant_type", "authorization_code");
         formData.add("client_id", clientId);
-        formData.add("redirect_uri", "http://localhost:3000");
+        formData.add("redirect_uri", frontendUri);
         formData.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(formData, headers);
