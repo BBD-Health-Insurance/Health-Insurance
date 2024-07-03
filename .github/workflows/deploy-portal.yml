@@ -69,7 +69,7 @@ jobs:
           aws-region: ${{secrets.AWS_REGION}}
 
       - name: Stop Existing Environment (Optional)
-        run: eb stop ${{ secrets.WEB_ENV_NAME }}
+        run: aws elasticbeanstalk stop-environment --environment-name ${{ secrets.WEB_ENV_NAME }}
 
       - name: Deploy to Elastic Beanstalk
         run: |
