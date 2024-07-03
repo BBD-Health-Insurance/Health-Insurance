@@ -68,7 +68,7 @@ jobs:
           role-session-name: deploy-server-session
           aws-region: ${{secrets.AWS_REGION}}
 
-      - name: Deploy to Elastic beanstalk
+      - name: Deploy to Elastic Beanstalk
         run: |
           aws elasticbeanstalk create-application-version --application-name ${{ secrets.WEB_APP_NAME }} --version-label ${{ github.run_id }} --source-bundle S3Bucket="${{ secrets.BUCKET_NAME_PORTAL }}",S3Key="application-${{ github.run_id }}.zip"
           aws elasticbeanstalk update-environment --application-name ${{ secrets.WEB_APP_NAME }} --environment-name ${{ secrets.WEB_ENV_NAME }} --version-label ${{ github.run_id }}
