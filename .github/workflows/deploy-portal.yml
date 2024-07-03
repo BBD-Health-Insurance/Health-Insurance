@@ -54,7 +54,7 @@ jobs:
     - name: Upload artifact to S3
       run: |
         cd frontend
-        aws s3 cp frontend.zip s3://${{ secrets.BUCKET_NAME }}/application-${{ github.run_id }}.zip
+        aws s3 cp frontend.zip s3://${{ secrets.BUCKET_NAME_PORTAL }}/application-${{ github.run_id }}.zip
 
   deploy:
     needs: build
