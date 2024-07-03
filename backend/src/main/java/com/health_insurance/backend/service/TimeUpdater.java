@@ -1,5 +1,7 @@
 package com.health_insurance.backend.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +14,9 @@ public class TimeUpdater {
         this.timeSimulation = timeSimulation;
     }
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 120000)
     public void updateSimulationTime() {
-        // used to update time
+        String currentTime = timeSimulation.getCurrentSimulationDate();
+        System.out.println(currentTime);
     }
 }
