@@ -4,6 +4,8 @@ import com.health_insurance.backend.dto.ResponseStatusDto;
 import com.health_insurance.backend.repository.ClaimHistoryRepository;
 import com.health_insurance.backend.repository.CoverPlanRepository;
 import com.health_insurance.backend.repository.DependentRepository;
+import com.health_insurance.backend.repository.StartTimeRepository;
+import com.health_insurance.backend.service.StartTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/")
@@ -28,6 +27,9 @@ public class SimulationController {
 
     @Autowired
     private ClaimHistoryRepository claimHistoryRepository;
+
+    @Autowired
+    private StartTimeRepository startTimeRepository;
 
     @PostMapping("/control-simulation")
     public ResponseEntity<ResponseStatusDto> updatePersonaInformation(@RequestBody Map<String, Object> request) {
@@ -48,18 +50,18 @@ public class SimulationController {
             dependentRepository.deleteAll();
             coverPlanRepository.deleteAll();
 
-            if (action.toLowerCase(Locale.ROOT).equals("start")){
-                // Todo, store startTime
-                String startTime = (String) request.get("startTime");
+            String startTime = (String) request.get("startTime");
 
-                if (startTime == null){
-                    reasons.add("StartTime not provided");
-                    return new ResponseEntity<>(
-                            new ResponseStatusDto(ResponseStatusDto.responseUnsuccessful, reasons),
-                            HttpStatus.INTERNAL_SERVER_ERROR
-                    );
-                }
+            if (startTime == null){
+                reasons.add("StartTime not provided");
+                return new ResponseEntity<>(
+                        new ResponseStatusDto(ResponseStatusDto.responseUnsuccessful, reasons),
+                        HttpStatus.INTERNAL_SERVER_ERROR
+                );
             }
+
+            StartTimeService startTimeService = new StartTimeService(startTimeRepository);
+            startTimeService.saveStartTime(startTime);
 
             reasons.add("Simulation " + action + "ed");
             return new ResponseEntity<>(new ResponseStatusDto(ResponseStatusDto.responseSuccessful, reasons), HttpStatus.OK);
