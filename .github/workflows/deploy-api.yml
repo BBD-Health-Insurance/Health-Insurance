@@ -54,7 +54,7 @@ jobs:
     - name: Upload artifact to S3
       run: |
         cd backend
-        aws s3 cp backend.zip s3://${{ secrets.BUCKET_NAME }}/application-${{ github.run_id }}.zip
+        aws s3 cp backend.zip s3://${{ secrets.BUCKET_NAME_API }}/application-${{ github.run_id }}.zip
 
   deploy:
     needs: build
