@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.health_insurance.backend.repository.ClaimHistoryRepository;
 import com.health_insurance.backend.repository.CoverPlanRepository;
 import com.health_insurance.backend.repository.DependentRepository;
 import com.health_insurance.backend.repository.MaxCoverRepository;
+import com.health_insurance.backend.service.MakePayment;
 import com.health_insurance.backend.dto.AddClaimHistoryDto;
 import com.health_insurance.backend.dto.ClaimHistoryDto;
 
@@ -48,11 +50,25 @@ public class ClaimHistoryController {
     @Autowired
     private MaxCoverRepository maxCoverRepository;
 
+    private final MakePayment makePayment;
+
+    @Autowired
+    public ClaimHistoryController(MakePayment makePayment) {
+        this.makePayment = makePayment;
+    }
+
     @GetMapping("/list-claimhistory")
     public ResponseEntity<ClaimHistoryDto> getAllClaimHistories() {
         List<ClaimHistory> claimHistories = claimHistoryRepository.findAll();
         ClaimHistoryDto claimHistoryDto = new ClaimHistoryDto(claimHistories);
         return new ResponseEntity<>(claimHistoryDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/test-payment")
+    public ResponseEntity<String> testMakePayment() {
+        ResponseEntity<String> responseEntity = makePayment.createTransaction(100, "HealthInsurance", "HealthCare");
+
+        return responseEntity;
     }
 
     @PostMapping("/pay-claim")
@@ -99,16 +115,22 @@ public class ClaimHistoryController {
                         amountPaid = maxCoverAmount;
                     }
 
-                    ClaimHistory claimHistory = new ClaimHistory();
-                    claimHistory.setCoverPlan(coverPlan);
-                    claimHistory.setClaimAmount(claimAmount);
-                    claimHistory.setAmountPaid(amountPaid);
-                    claimHistory.setClaimPersonaID(personaID);
-                    claimHistory.setTimeStamp(new Date());
+                    ResponseEntity<String> paymentResponse = makePayment.createTransaction(amountPaid.doubleValue(), personaIDStr, personaIDStr);
 
-                    claimHistoryRepository.save(claimHistory);
+                    if (paymentResponse.getStatusCode() == HttpStatus.OK) {
+                        ClaimHistory claimHistory = new ClaimHistory();
+                        claimHistory.setCoverPlan(coverPlan);
+                        claimHistory.setClaimAmount(claimAmount);
+                        claimHistory.setAmountPaid(amountPaid);
+                        claimHistory.setClaimPersonaID(personaID);
+                        claimHistory.setTimeStamp(new Date());
 
-                    responseList.add(new AddClaimHistoryDto("successful"));
+                        claimHistoryRepository.save(claimHistory);
+
+                        responseList.add(new AddClaimHistoryDto("successful"));
+                    } else {
+                        responseList.add(new AddClaimHistoryDto("unsuccessful - cannot make payment"));
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     responseList.add(new AddClaimHistoryDto("unsuccessful"));
