@@ -60,6 +60,9 @@ public class SimulationController {
                 );
             }
 
+            StartTimeService startTimeService = new StartTimeService(startTimeRepository);
+            startTimeService.saveStartTime(startTime);
+
             reasons.add("Simulation " + action + "ed");
             return new ResponseEntity<>(new ResponseStatusDto(ResponseStatusDto.responseSuccessful, reasons), HttpStatus.OK);
         } catch (Exception e) {
