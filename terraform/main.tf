@@ -11,6 +11,18 @@ resource "aws_s3_bucket_versioning" "bucket_versioning" {
   }
 }
 
+resource "aws_s3_bucket" "api_bucket" {
+  bucket = "${var.project_name}-api-deployments"
+  tags = merge(var.mandatory_tags, { Name = "${var.project_name}-api-deployments" })
+}
+
+resource "aws_s3_bucket_versioning" "api_bucket_versioning" {
+  bucket = aws_s3_bucket.api_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
 resource "aws_vpc" "vpc" {
   cidr_block           = var.cidr_block
   enable_dns_hostnames = true
@@ -241,9 +253,14 @@ resource "aws_elastic_beanstalk_environment" "web_env" {
 
 }
 
-resource "aws_elastic_beanstalk_environment" "api-web_env" {
+resource "aws_elastic_beanstalk_application" "web_app_api" {
+  name        = "${var.project_name}-api-web-app"
+  description = "Beanstalk API application"
+}
+
+resource "aws_elastic_beanstalk_environment" "web_env_api" {
   name                = "${var.project_name}-api-web-env"
-  application         = aws_elastic_beanstalk_application.web_app.name
+  application         = aws_elastic_beanstalk_application.web_app_api.name
   solution_stack_name = "64bit Amazon Linux 2023 v4.3.2 running Docker"
   cname_prefix        = "${var.project_name}-api-web"
 

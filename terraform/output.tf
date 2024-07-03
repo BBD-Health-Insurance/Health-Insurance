@@ -22,7 +22,11 @@ output "aws_region" {
   value = var.region
 }
 
-output "bucket_name" {
+output "frontend_bucket_name" {
   value = aws_s3_bucket.bucket.bucket
+}
+
+output "api_bucket_name" {
+  value = aws_s3_bucket.api_bucket.bucket
 }
 
