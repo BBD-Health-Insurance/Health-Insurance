@@ -217,8 +217,7 @@ public class PersonaInformationController {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
-        // Todo, find out what this header must look like
-        // headers.set("Identification", "health_insurance");
+         headers.set("X-Origin", "health_insurance");
 
         HttpEntity<JsonNode> entity = new HttpEntity<>(body, headers);
         return restTemplate.exchange(url, method, entity, String.class);
