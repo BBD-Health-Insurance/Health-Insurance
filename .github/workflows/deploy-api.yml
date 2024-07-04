@@ -76,6 +76,7 @@ jobs:
             distribution: 'oracle'
     
       - name: Test with Maven
+        working-directory: backend
         run: |
             cd backend
             mvn test
