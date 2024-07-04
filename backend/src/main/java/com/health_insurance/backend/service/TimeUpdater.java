@@ -48,10 +48,10 @@ public class TimeUpdater {
             PayDividends();
         }
     }
-
+    
     public void RegisterStockExchange() {
         try {
-            String callbackUrl = "http://localhost:8080/stock-register";
+            String callbackUrl = "https://api.health.projects.bbdgrad.com/stock-register";
             String url = "https://api.mese.projects.bbdgrad.com/businesses?callbackUrl=" + callbackUrl;
 
             RestTemplate restTemplate = new RestTemplate();
@@ -83,7 +83,7 @@ public class TimeUpdater {
                 String businessId = data.getBusinessID().toString();
                 String tradingId = data.getTradingID().toString();
 
-                String callbackUrl = "http://localhost:8080/stock-sell";
+                String callbackUrl = "https://api.health.projects.bbdgrad.com/stock-sell";
                 String url = "https://api.mese.projects.bbdgrad.com/stocks/sell?callbackUrl=" + callbackUrl;
 
                 RestTemplate restTemplate = new RestTemplate();
@@ -119,7 +119,7 @@ public class TimeUpdater {
                 String businessId = data.getBusinessID().toString();
                 String tradingId = data.getTradingID().toString();
 
-                String callbackUrl = "http://localhost:8080/stock-dividends";
+                String callbackUrl = "https://api.health.projects.bbdgrad.com/stock-dividends";
                 String url = "https://api.mese.projects.bbdgrad.com/dividends?callbackUrl=" + callbackUrl;
 
                 RestTemplate restTemplate = new RestTemplate();
