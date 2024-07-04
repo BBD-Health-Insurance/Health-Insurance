@@ -75,14 +75,8 @@ jobs:
             java-version: '21'
             distribution: 'oracle'
     
-      - name: Test with Maven
-        working-directory: backend
-        run: |
-            mvn test
-    
       - name: Build with Maven
         run: |
-            cd backend  
             mvn -B package --file pom.xml
           
       - uses: aws-actions/configure-aws-credentials@v4
