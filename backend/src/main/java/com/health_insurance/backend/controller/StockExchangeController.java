@@ -78,7 +78,7 @@ public class StockExchangeController {
     public void payDividends(@RequestBody Map<String, String> body) {
         try {
             String referenceId = body.get("referenceId");
-            String creditAccount = "stock-exchange";
+            String creditAccount = "stock_exchange";
             ResponseEntity<String> paymentResponse = makePayment.createTransaction(creditAccount, 100, referenceId, referenceId);
             if (paymentResponse.getStatusCode() == HttpStatus.OK) {
                 System.out.println("Dividends paid");
