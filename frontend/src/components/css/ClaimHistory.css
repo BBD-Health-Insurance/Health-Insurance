@@ -1,10 +1,19 @@
-/* src/css/ClaimHistory.css */
-
 .claim-history-container {
   font-family: Arial, sans-serif;
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.claim-history-table-container {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
 }
 
 .claim-history-table {
@@ -15,45 +24,53 @@
 
 .claim-history-table th, .claim-history-table td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 12px;
   text-align: left;
 }
 
 .claim-history-table th {
+  background-color: #f2f2f2;
   cursor: pointer;
   position: relative;
+  font-weight: bold;
 }
 
-.claim-history-table th.ascending::after {
-  content: ' \2191'; /* Up arrow */
-}
-
+.claim-history-table th.ascending::after,
 .claim-history-table th.descending::after {
-  content: ' \2193'; /* Down arrow */
-}
-
-.arrow {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.8em;
-}
-
-.arrow::after {
-  content: '';
+  content: ' ';
   display: inline-block;
+  width: 0;
+  height: 0;
   margin-left: 5px;
-  border-width: 5px;
+  vertical-align: middle;
   border-style: solid;
 }
 
-.arrow.ascending::after {
-  border-color: transparent transparent #000;
-  border-width: 0 5px 5px;
+.claim-history-table th.ascending::after {
+  border-width: 0 6px 6px 6px;
+  border-color: transparent transparent #333 transparent;
 }
 
-.arrow.descending::after {
-  border-color: #000 transparent transparent;
-  border-width: 5px 5px 0;
+.claim-history-table th.descending::after {
+  border-width: 6px 6px 0 6px;
+  border-color: #333 transparent transparent transparent;
+}
+
+.claim-history-table tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.claim-history-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.claim-history-table td {
+  font-size: 14px;
+}
+
+.claim-history-container h1 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
 }

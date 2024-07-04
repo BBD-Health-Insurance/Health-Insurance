@@ -35,7 +35,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://alex-terraform.d32tpokpqcrt9l.amplifyapp.com/")
 public class ClaimHistoryController {
 
     @Autowired

@@ -17,7 +17,7 @@ nav ul li {
 }
 
 nav ul li a,
-nav ul li button { /* Combined selector for <a> and <button> */
+nav ul li button {
   color: #ecf0f1;
   text-decoration: none;
   font-size: 1.1rem;
@@ -30,14 +30,13 @@ nav ul li button { /* Combined selector for <a> and <button> */
 }
 
 nav ul li a:hover,
-nav ul li button:hover { /* Combined hover selector for <a> and <button> */
+nav ul li button:hover {
   background-color: #34495e;
   color: #ffffff;
 }
 
-/* New CSS to ensure the login/logout button is at the rightmost */
 nav ul li.auth {
-  margin-left: auto; /* Push this item to the right */
+  margin-left: auto;
 }
 
 .content {
