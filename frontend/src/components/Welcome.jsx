@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import './css/Welcome.css';
+
 export const Welcome = () => {
   const [error, setError] = useState(false);
   const location = useLocation();
@@ -20,14 +22,13 @@ export const Welcome = () => {
       })
         .then(response => {
           if (response.ok) {
-            return response.json(); // Await the response.json() promise
+            return response.json();
           } else {
             throw new Error('Failed to authenticate');
           }
         })
         .then(body => {
-          console.log('Body:', body); // Debug: log the response body
-          const { access_token} = body;
+          const { access_token } = body;
           if (access_token) {
             localStorage.setItem('accessToken', access_token);
             window.dispatchEvent(new Event('storage'));
@@ -37,20 +38,33 @@ export const Welcome = () => {
           }
         })
         .catch(error => {
-          console.error('Authentication error:', error);
           setError(true);
         });
-    } else {
-      console.log('No code found in URL');
     }
   }, [location]);
 
   return (
-    <div>
-      <h1>Welcome!</h1>
-      <br></br>
-      <h3>Please log in to see further content</h3>
-      {error && <p>Failed to authenticate. Please try again.</p>}
+    <div className="welcome-container">
+
+      <h1 className="welcome-heading">Welcome to the Health Insurance Portal!</h1>
+      <p className="welcome-subtext">
+        Please log in to access your personalized dashboard and manage your health insurance claims.
+      </p>
+
+      {error && <p className="error-message">Failed to authenticate. Please try again.</p>}
+
+      <div className="welcome-info-section">
+
+        <div className="welcome-info-box">
+          <h2 className="info-title">Why Choose Us?</h2>
+          <p>We offer the BEST health insurance plans tailored to meet your needs!</p>
+        </div>
+
+        <div className="welcome-info-box">
+          <h2 className="info-title">Need Assistance?</h2>
+          <p>Contact our CTO at katlego.kungoane@bbd.co.za and shout out all your needs/complaints!</p>
+        </div>
+      </div>
     </div>
   );
 };

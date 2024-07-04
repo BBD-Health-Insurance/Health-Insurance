@@ -20,7 +20,6 @@ export const Navbar = () => {
   }, []);
 
   const logout = () => {
-    // localStorage.clear();
     localStorage.removeItem('accessToken');
     window.dispatchEvent(new Event('storage'));
     navigate("/");
