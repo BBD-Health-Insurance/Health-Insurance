@@ -56,42 +56,44 @@ export const ClaimHistory = () => {
   return (
     <div className="claim-history-container">
       <h1>Claim History</h1>
-      <table className="claim-history-table">
-        <thead>
-          <tr>
-            <th onClick={() => requestSort('claimHistoryID')} className={getClassNamesFor('claimHistoryID')}>
-              Claim History ID
-            </th>
-            <th onClick={() => requestSort('coverPlan.coverPlanID')} className={getClassNamesFor('coverPlan.coverPlanID')}>
-              Cover Plan ID
-            </th>
-            <th onClick={() => requestSort('claimAmount')} className={getClassNamesFor('claimAmount')}>
-              Claim Amount
-            </th>
-            <th onClick={() => requestSort('amountPaid')} className={getClassNamesFor('amountPaid')}>
-              Amount Paid
-            </th>
-            <th onClick={() => requestSort('claimPersonaID')} className={getClassNamesFor('claimPersonaID')}>
-              Claim Persona ID
-            </th>
-            <th onClick={() => requestSort('timeStamp')} className={getClassNamesFor('timeStamp')}>
-              Time Stamp
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedData.map((claim) => (
-            <tr key={claim.claimHistoryID}>
-              <td>{claim.claimHistoryID}</td>
-              <td>{claim.coverPlan.coverPlanID}</td>
-              <td>{claim.claimAmount}</td>
-              <td>{claim.amountPaid}</td>
-              <td>{claim.claimPersonaID}</td>
-              <td>{new Date(claim.timeStamp).toLocaleString()}</td>
+      <div className="claim-history-table-container">
+        <table className="claim-history-table">
+          <thead>
+            <tr>
+              <th onClick={() => requestSort('claimHistoryID')} className={getClassNamesFor('claimHistoryID')}>
+                Claim History ID
+              </th>
+              <th onClick={() => requestSort('coverPlan.coverPlanID')} className={getClassNamesFor('coverPlan.coverPlanID')}>
+                Cover Plan ID
+              </th>
+              <th onClick={() => requestSort('claimAmount')} className={getClassNamesFor('claimAmount')}>
+                Claim Amount
+              </th>
+              <th onClick={() => requestSort('amountPaid')} className={getClassNamesFor('amountPaid')}>
+                Amount Paid
+              </th>
+              <th onClick={() => requestSort('claimPersonaID')} className={getClassNamesFor('claimPersonaID')}>
+                Claim Persona ID
+              </th>
+              <th onClick={() => requestSort('timeStamp')} className={getClassNamesFor('timeStamp')}>
+                Time Stamp
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {sortedData.map((claim) => (
+              <tr key={claim.claimHistoryID}>
+                <td>{claim.claimHistoryID}</td>
+                <td>{claim.coverPlan.coverPlanID}</td>
+                <td>{claim.claimAmount}</td>
+                <td>{claim.amountPaid}</td>
+                <td>{claim.claimPersonaID}</td>
+                <td>{new Date(claim.timeStamp).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

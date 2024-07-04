@@ -4,7 +4,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,11 +16,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class PayTax {
 
   private String registerTaxUrl = "https://api.mers.projects.bbdgrad.com/api/taxpayer/business/register";
-  private String taxIdUrl = "https://api.mers.projects.bbdgrad.com/api/taxpayer/business/getTaxId";
-  private String taxAmountUrl = "http://api.mers.projects.bbdgrad.com/api/taxcalculator/calculate";
-  private String payTaxUrl = "http://api.mers.projects.bbdgrad.com/api/taxpayment/createTaxInvoice";
+  private String taxAmountUrl = "https://api.mers.projects.bbdgrad.com/api/taxcalculator/calculate";
+  private String payTaxUrl = "https://api.mers.projects.bbdgrad.com/api/taxpayment/createTaxInvoice";
   private String accountBalanceUrl = "https://api.commercialbank.projects.bbdgrad.com:443/account/balance";
-  private String taxRateUrl = "http://api.zeus.projects.bbdgrad.com/tax-rate";
 
   public String payTax() {
 
@@ -132,7 +129,7 @@ public class PayTax {
 
       HttpEntity<String> entity = new HttpEntity<>(headers);
 
-      String urlWithParams = taxAmountUrl + "?amount=" + profitAmount + "&taxType=INCOME";
+      String urlWithParams = taxAmountUrl + "?amount=" + profitAmount + "&taxType=VAT";
 
       ResponseEntity<String> response = restTemplate.exchange(urlWithParams, HttpMethod.GET, entity, String.class);
 
