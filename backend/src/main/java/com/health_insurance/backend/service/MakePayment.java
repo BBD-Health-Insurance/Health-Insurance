@@ -20,13 +20,15 @@ public class MakePayment {
     private String authToken;
     private String url = "https://api.commercialbank.projects.bbdgrad.com/transactions/create";
 
-    public ResponseEntity<String> createTransaction(double amount, String debitRef, String creditRef) {
+    public ResponseEntity<String> createTransaction(String creditAcc, double amount, String debitRef, String creditRef) {
         RestTemplate restTemplate = new RestTemplate();
 
+        int amountInt = (int) amount;
+
         MakePaymentDto.Transaction transaction = new MakePaymentDto.Transaction();
-        transaction.setDebitAccountName("HealthCare");
-        transaction.setCreditAccountName("HealthInsurance");
-        transaction.setAmount(amount);
+        transaction.setDebitAccountName("health_insurance");
+        transaction.setCreditAccountName(creditAcc);
+        transaction.setAmount(amountInt);
         transaction.setDebitRef(debitRef);
         transaction.setCreditRef(creditRef);
 
@@ -35,7 +37,7 @@ public class MakePayment {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-type", "application/json");
-        // headers.setBearerAuth(authToken);
+        headers.set("X-Origin", "health_insurance");
 
         HttpEntity<MakePaymentDto> requestEntity = new HttpEntity<>(requestBody, headers);
 
