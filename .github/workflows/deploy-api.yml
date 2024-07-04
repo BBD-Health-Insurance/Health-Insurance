@@ -78,7 +78,6 @@ jobs:
       - name: Test with Maven
         working-directory: backend
         run: |
-            cd backend
             mvn test
     
       - name: Build with Maven
