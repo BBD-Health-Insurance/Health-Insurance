@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Base64;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000") // Allow CORS for all origins
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
     @Value("${cognito.clientId}")
@@ -43,18 +43,14 @@ public class AuthController {
     public ResponseEntity<String> getToken(@RequestBody Map<String, String> requestBody) {
         RestTemplate restTemplate = new RestTemplate();
 
-        // Prepare Basic Authentication header
         String headerString = createBasicAuthHeader(clientId, clientSecret);
 
-        // Prepare headers for the request
         HttpHeaders headers = new HttpHeaders();
         headers.setBasicAuth(headerString);
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        // Extract code from request body
         String code = requestBody.get("code");
 
-        // Prepare form data for token exchange
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("grant_type", "authorization_code");
         formData.add("client_id", clientId);
@@ -64,7 +60,6 @@ public class AuthController {
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(formData, headers);
 
         try {
-            // Perform POST request using RestTemplate
             ResponseEntity<Map> responseEntity = restTemplate.exchange(
                     domain + "/oauth2/token",
                     HttpMethod.POST,
@@ -72,33 +67,25 @@ public class AuthController {
                     Map.class
             );
 
-            // Retrieve the response body
             Map<String, Object> responseBody = responseEntity.getBody();
 
-            // Check if response body is not null
             if (responseBody != null) {
 
                 Object accessTokenObj = responseBody.get("access_token");
                 if (accessTokenObj != null) {
                     String accessToken = accessTokenObj.toString();
                     String jsonResponse = objectMapper.writeValueAsString(Map.of("access_token", accessToken));
-                    // Return only the access token as ResponseEntity
                     return ResponseEntity.ok(jsonResponse);
                 } else {
-                    // Handle case where access_token is missing
                     return ResponseEntity.badRequest().body("Access token not found in response");
                 }
-                // return ResponseEntity.ok(responseBody);
             } else {
-                // Handle case where response body is null
                 return ResponseEntity.badRequest().body("Error communicating with Cognito");
             }
         } catch (HttpClientErrorException ex) {
-            // Log or handle specific RestTemplate exceptions
             ex.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + ex.getMessage());
         } catch (Exception ex) {
-            // Log or handle generic exceptions
             ex.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error: " + ex.getMessage());
         }
