@@ -108,7 +108,7 @@ public class ClaimHistoryController {
                         amountPaid = maxCoverAmount;
                     }
 
-                    String creditAccount = "health-care";
+                    String creditAccount = "health_care";
 
                     ResponseEntity<String> paymentResponse = makePayment.createTransaction(creditAccount, amountPaid.doubleValue(), personaIDStr, personaIDStr);
 

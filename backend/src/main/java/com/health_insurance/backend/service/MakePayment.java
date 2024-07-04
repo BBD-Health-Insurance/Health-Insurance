@@ -26,7 +26,7 @@ public class MakePayment {
         int amountInt = (int) amount;
 
         MakePaymentDto.Transaction transaction = new MakePaymentDto.Transaction();
-        transaction.setDebitAccountName("health-insurance");
+        transaction.setDebitAccountName("health_insurance");
         transaction.setCreditAccountName(creditAcc);
         transaction.setAmount(amountInt);
         transaction.setDebitRef(debitRef);
@@ -37,7 +37,7 @@ public class MakePayment {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-type", "application/json");
-        headers.set("X-Origin", "health-insurance");
+        headers.set("X-Origin", "health_insurance");
 
         HttpEntity<MakePaymentDto> requestEntity = new HttpEntity<>(requestBody, headers);
 
