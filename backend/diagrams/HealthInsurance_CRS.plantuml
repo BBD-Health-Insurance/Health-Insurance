@@ -1,6 +1,6 @@
 @startuml HealthInsurance and Central Revenue Services
 
-title HealthInsurance and Central Revenue Services
+title Health Insurance and Central Revenue Services
 
 participant HealthInsuranceAPI as hi
 participant CRS_API as crs

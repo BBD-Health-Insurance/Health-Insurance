@@ -1,0 +1,206 @@
+@startuml HealthInsurance and Health Care
+
+title Health Insurance and Health Care
+
+participant HealthInsuranceAPI as hi
+participant HealthCareAPI as hc
+participant HealthInsuranceDB as db
+participant CommercialBankAPI as cb
+
+
+autonumber "<b>[00]"
+
+hc -> hi: Submit Claim
+note right
+  **Method**: Post
+  **URL**: api.health.projects.bbdgrad.com/pay-claim
+  **Body**: 
+    [
+      {
+        "personaID": "123456",
+        "claimAmount": 1500
+      }
+    ]
+end note
+
+hi -> db: Get persona's cover plan
+note left
+  **SELECT** *
+  **FROM** CoverPlan
+  **WHERE** personaID = claimPersonaID
+end note
+db -> hi: Cover Plan
+
+alt If that persona doesn't have a cover plan
+  hi -> db: Get dependent with claimPersonID.
+  note left
+    **SELECT** coverPlanID
+    **FROM** Dependent
+    **WHERE** personaID = claimPersonaID
+  end note
+  db -> hi: Cover Plan ID
+
+  alt If that persona is also not a dependent
+    hi -> hc: Persona not found
+    note left
+      **Status**: 200
+      **Body**: {"status": "unsuccessful"}
+    end note
+
+  end
+
+  autonumber 6 "<b>[00]"
+
+  hi -> db: Get Cover Plan
+  note left
+    **Select** *
+    **FROM** CoverPlan
+    **WHERE** coverPlanID = coverPlanID
+  end note
+  db -> hi: Cover Plan
+end
+
+hi -> hi: Ensure cover plan is active
+alt Cover plan is not active
+  hi -> hc: Inactive Cover Plan
+    note left
+      **Status**: 200
+      **Body**: {"status": "unsuccessful"}
+    end note
+end
+
+autonumber 9 "<b>[00]"
+
+hi -> hi: Set amount paid.
+note left 
+  amountPaid = 
+    min(claimAmount, maxAmount)
+end note
+
+
+hi -> cb: Pay Healthcare amountPaid
+note left
+  **Method**: POST
+  **URL HOST**: https://api.commercialbank.projects.bbdgrad.com
+  **URL Path**: transactions/create
+  **Body**:
+    {
+      "transactions": [
+        {
+          "debitAccountName": "HealthCare",
+          "creditAccountName": "HealthInsurance",
+          "amount": amountPaid,
+          "debitRef": claimPersonaID,
+          "creditRef": claimPersonaID
+        }
+      ]
+    }
+end note
+
+alt 200: OK
+  autonumber 11 "<b>[00]"  
+
+  cb --> hi: Response
+  note right
+  **STATUS**: 200
+  **BODY**:
+  {
+    "status": 0,
+    "data": {
+      "pageIndex": 0,
+      "itemsPerPage": 0,
+      "currentItemCount": 0,
+      "items": [
+        {
+          "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "debitAccountName": "string",
+          "creditAccountName": "string",
+          "reference": "string",
+          "amount": 0,
+          "date": "string",
+          "status": "failed"
+        }
+      ]
+    },
+    "message": "string"
+  }
+end note
+
+hi -> db: Save Claim History
+note left
+  **INSERT INTO** ClaimHistory
+  values (coverPlanID, claimAmount, amountPaid, personaID)
+end note
+
+db -> hi: success
+
+hi -> hc: Success
+note left
+  **Status**: 200
+  **Body**: {"status": "success"}
+end note
+
+else 400: Bad Request
+  autonumber 11 "<b>[00]"  
+
+  cb --> hi: Response
+  note right
+    **STATUS**: 400
+    **BODY**:
+      {
+        "status": 0,
+        "data": {},
+        "message": "string"
+      }
+  end note
+
+  hi -> hc: Unsuccessful
+  note left
+    **Status**: 400
+    **Body**: {"status": "unsuccessful"}
+  end note
+
+else 404: Not Found
+  autonumber 11 "<b>[00]"  
+  
+  cb --> hi: Response
+  note right
+    **STATUS**: 404
+    **BODY**:
+      {
+        "status": 0,
+        "data": {},
+        "message": "string"
+      }
+  end note
+
+  hi -> hc: Unauthorized
+  note left
+    **Status**: 404
+    **Body**: {"status": "unauthorized"}
+  end note
+
+else 500: Internal server error
+  autonumber 11 "<b>[00]"  
+  
+  cb --> hi: Response
+  note right
+    **STATUS**: 500
+    **BODY**:
+      {
+        "status": 0,
+        "data": {},
+        "message": "string"
+      }
+  end note
+
+  hi -> hc: Internal Server Error
+  note left
+    **Status**: 500
+    **Body**: {"status": "Internal Server Error"}
+  end note
+
+end
+
+
+@enduml

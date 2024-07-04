@@ -18,7 +18,7 @@ import com.health_insurance.backend.dto.MakePaymentDto;
 public class MakePayment {
     
     private String authToken;
-    private String url = "http://api.commercialbank.projects.bbdgrad.com/transactions/create";
+    private String url = "https://api.commercialbank.projects.bbdgrad.com/transactions/create";
 
     public ResponseEntity<String> createTransaction(double amount, String debitRef, String creditRef) {
         RestTemplate restTemplate = new RestTemplate();

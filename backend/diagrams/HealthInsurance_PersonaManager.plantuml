@@ -1,6 +1,6 @@
 @startuml HealthInsurance and PersonaManager
 
-title HealthInsurance and PersonaManager
+title Health Insurance and PersonaManager
 
 participant HealthInsuranceAPI as hi
 participant PersonaManagerAPI as per
@@ -159,7 +159,7 @@ else 404: Not Found
   
   cb --> hi: Response
   note right
-    **STATUS**: 400
+    **STATUS**: 404
     **BODY**:
       {
         "status": 0,
@@ -173,7 +173,7 @@ else 500: Internal server error
   
   cb --> hi: Response
   note right
-    **STATUS**: 400
+    **STATUS**: 500
     **BODY**:
       {
         "status": 0,
@@ -265,7 +265,7 @@ else 404: Not Found
   
   cb --> hi: Response
   note right
-    **STATUS**: 400
+    **STATUS**: 404
     **BODY**:
       {
         "status": 0,
@@ -279,7 +279,7 @@ else 500: Internal server error
   
   cb --> hi: Response
   note right
-    **STATUS**: 400
+    **STATUS**: 500
     **BODY**:
       {
         "status": 0,
