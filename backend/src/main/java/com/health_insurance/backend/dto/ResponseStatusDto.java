@@ -16,6 +16,7 @@ public class ResponseStatusDto {
 
     public static String responseUnsuccessful = "unsuccessful";
     public static String responseSuccessful = "successful";
+    public static String responseInternalServerError = "internal server error";
 
     private String status;
     private List<String> reason;

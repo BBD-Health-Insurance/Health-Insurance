@@ -1,0 +1,292 @@
+@startuml HealthInsurance and PersonaManager
+
+title Health Insurance and PersonaManager
+
+participant HealthInsuranceAPI as hi
+participant PersonaManagerAPI as per
+participant CommercialBankAPI as cb
+participant HealthInsuranceDB as db
+
+autonumber "<b>[00]"
+
+per -> hi: Daily Update
+note right
+  **Method**: Post
+  **URL**: api.health.projects.bbdgrad.com/persona-information
+  **Body**: 
+  {
+    "children": [
+      {
+        "parent": 1,
+        "child": 3
+      }
+    ],
+    "adults": [4, 5, 6],
+    "deaths": [
+      {
+        "deceased": 7,
+        "nextOfKin": 8
+      }
+    ]
+  }
+end note
+
+alt Parent has health insurance
+  hi -> db: Add child as dependent of parent
+  note left
+    **INSERT INTO** 
+      Dependent(coverPlanID, personaID)
+    **VALUES**
+      (parentCoverPlanID, childPersonaID)
+  end note
+
+  db --> hi: Success
+
+  hi -> per: Success for those personas
+  note left
+    [
+      {
+        **status**: Successful
+        **reasons**: []
+      }
+    ]
+  end note
+
+else
+  autonumber 2 "<b>[00]"
+  hi -> per: Unsuccessful for those personas
+  note left
+    [
+      {
+        **status**: Successful
+        **reasons**: [
+          "Persona **parentPersonaID** doesn't have life insurance"
+        ]
+      }
+    ]
+  end note
+
+end
+
+hi -> db: Remove the persona from being a dependent on thier parent
+note left
+  **DELETE** from Dependents
+  **WHERE** personaID = adultPersonaID
+end note
+
+db --> hi: Success
+
+hi -> db: Sign up the new adult to have Health Insurance
+note left
+  **INSERT** into CoverPlan(personaID, statusID)
+  **VALUES** (adultPersonaID, activeStatusID)
+end note
+
+db --> hi: Success
+
+hi -> cb: Setup debit order with these personas
+note left
+  **Method**: POST
+  **URL**: api.commercialbank.projects.bbdgrad.com/debitOrders/create
+  **Body**:
+    {
+      "debitOrders": [
+        {
+          "debitAccountName": adultPersonaID,
+          "creditAccountName": "health_insurance",
+          "debitRef": "Health Insurance Premium",
+          "creditRef": "Premium for ${adultPersonaID}",
+          "amount": 102400
+        }
+      ]
+    }
+end note
+
+alt 200: OK
+  autonumber 7 "<b>[00]"  
+
+  cb --> hi: Response
+  note right
+  **STATUS**: 200
+  **BODY**:
+  {
+    "status": 0,
+    "data": {
+      "pageIndex": 0,
+      "itemsPerPage": 0,
+      "currentItemCount": 0,
+      "items": [
+        {
+          "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "debitAccountName": "string",
+          "creditAccountName": "string",
+          "creationDate": "string",
+          "amount": 0,
+          "senderRef": "string",
+          "receiverRef": "string",
+          "disabled": true
+        }
+      ]
+    },
+    "message": "string"
+  }
+end note
+
+hi -> db: Save debit order id
+note left
+  **UPDATE** CoverPlan
+  **SET** debitOrderID = id
+  **WHERE** personaID = adultPersonaID
+end note
+
+db --> hi: success
+
+else 400: Bad Request
+  autonumber 7 "<b>[00]"  
+
+  cb --> hi: Response
+  note right
+    **STATUS**: 400
+    **BODY**:
+      {
+        "status": 0,
+        "data": {},
+        "message": "string"
+      }
+  end note
+else 404: Not Found
+  autonumber 7 "<b>[00]"  
+  
+  cb --> hi: Response
+  note right
+    **STATUS**: 404
+    **BODY**:
+      {
+        "status": 0,
+        "data": {},
+        "message": "string"
+      }
+  end note
+
+else 500: Internal server error
+  autonumber 7 "<b>[00]"  
+  
+  cb --> hi: Response
+  note right
+    **STATUS**: 500
+    **BODY**:
+      {
+        "status": 0,
+        "data": {},
+        "message": "string"
+      }
+  end note
+end
+
+hi -> db: Terminate deceased persona's plan
+note left
+  **UPDATE** CoverPlan
+  **SET** statusID = deadStatusID
+  **WHERE** personaID = deceasedPersonaID
+end note
+
+db --> hi: Success
+
+hi -> db: Get debitOrderID for deceased persona
+note left
+  **SELECT** debitOrderID
+  **FROM** CoverPlan
+  **WHERE** personaID = deceasedPersonaID
+end note
+
+db --> hi: debitOrderID
+
+hi -> cb: Cancel debit order.
+note left 
+  **Method**: PUT
+  **URL**: api.commercialbank.projects.bbdgrad.com/debitOrders/{debitOrderID}
+  **Body**:
+    {
+      "debitAccountName": deceasedPersonaID,
+      "creditAccountName": "health_insurance",
+      "debitRef": "Health Insurance Premium",
+      "creditRef": "Premium for ${deceasedPersonaID}",
+      "amount": 0
+    }
+end note
+
+alt 200: OK
+  autonumber 13 "<b>[00]"  
+
+  cb --> hi: Response
+  note right
+  **STATUS**: 200
+  **BODY**:
+  {
+    "status": 0,
+    "data": {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "debitAccountName": "string",
+      "creditAccountName": "string",
+      "creationDate": "string",
+      "amount": 0,
+      "senderRef": "string",
+      "receiverRef": "string",
+      "disabled": true
+    },
+    "message": "string"
+  }
+end note
+
+hi -> db: Save debit order id
+note left
+  **UPDATE** CoverPlan
+  **SET** debitOrderID = id
+  **WHERE** personaID = adultPersonaID
+end note
+
+db --> hi: success
+
+else 400: Bad Request
+  autonumber 13 "<b>[00]"  
+
+  cb --> hi: Response
+  note right
+    **STATUS**: 400
+    **BODY**:
+      {
+        "status": 0,
+        "data": {},
+        "message": "string"
+      }
+  end note
+else 404: Not Found
+  autonumber 13 "<b>[00]"  
+  
+  cb --> hi: Response
+  note right
+    **STATUS**: 404
+    **BODY**:
+      {
+        "status": 0,
+        "data": {},
+        "message": "string"
+      }
+  end note
+
+else 500: Internal server error
+  autonumber 13 "<b>[00]"  
+  
+  cb --> hi: Response
+  note right
+    **STATUS**: 500
+    **BODY**:
+      {
+        "status": 0,
+        "data": {},
+        "message": "string"
+      }
+  end note
+end
+
+@enduml
