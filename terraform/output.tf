@@ -1,17 +1,29 @@
+# output "web_domain_url" {
+#   value = aws_elastic_beanstalk_environment.web_env.name
+# }
+
 output "web_domain_url" {
-  value = aws_elastic_beanstalk_environment.web_env.name
+  value = aws_elastic_beanstalk_environment.web_env_api.name
 }
 
 output "db_instance_address" {
   value = aws_db_instance.db.address
 }
 
+# output "eb_web_env_name" {
+#   value = aws_elastic_beanstalk_environment.web_env.name
+# }
+
+# output "eb_web_app_name" {
+#   value = aws_elastic_beanstalk_application.web_app.name
+# }
+
 output "eb_web_env_name" {
-  value = aws_elastic_beanstalk_environment.web_env.name
+  value = aws_elastic_beanstalk_environment.web_env_api.name
 }
 
 output "eb_web_app_name" {
-  value = aws_elastic_beanstalk_application.web_app.name
+  value = aws_elastic_beanstalk_application.web_app_api.name
 }
 
 output "github_action_role_arn" {

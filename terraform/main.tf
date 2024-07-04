@@ -127,131 +127,131 @@ resource "aws_db_instance" "db" {
   tags = merge(var.mandatory_tags, { Name = "${var.project_name}-db" })
 }
 
-resource "aws_elastic_beanstalk_application" "web_app" {
-  name        = "${var.project_name}-web-app"
-  description = "Beanstalk application"
-}
+# resource "aws_elastic_beanstalk_application" "web_app" {
+#   name        = "${var.project_name}-web-app"
+#   description = "Beanstalk application"
+# }
 
-resource "aws_elastic_beanstalk_environment" "web_env" {
-  name                = "${var.project_name}-web-env"
-  application         = aws_elastic_beanstalk_application.web_app.name
-  solution_stack_name = "64bit Amazon Linux 2023 v4.3.2 running Docker"
-  cname_prefix        = "${var.project_name}-web"
+# resource "aws_elastic_beanstalk_environment" "web_env" {
+#   name                = "${var.project_name}-web-env"
+#   application         = aws_elastic_beanstalk_application.web_app.name
+#   solution_stack_name = "64bit Amazon Linux 2023 v4.3.2 running Docker"
+#   cname_prefix        = "${var.project_name}-web"
 
-  setting {
-    namespace = "aws:ec2:vpc"
-    name      = "VPCId"
-    value     = aws_vpc.vpc.id
-  }
-  setting {
-    namespace = "aws:ec2:vpc"
-    name      = "Subnets"
-    value     = join(",", aws_subnet.private_subnets[*].id)
-  }
-  setting {
-    namespace = "aws:ec2:vpc"
-    name      = "ELBSubnets"
-    value     = join(",", aws_subnet.public_subnets[*].id)
-  }
-  setting {
-    namespace = "aws:ec2:instances"
-    name      = "InstanceTypes"
-    value     = "t3.micro"
-  }
-  # setting {
-  #   namespace = "aws:ec2:vpc"
-  #   name      = "AssociatePublicIpAddress"
-  #   value     = true
-  # }
-  setting {
-    namespace = "aws:autoscaling:asg"
-    name      = "MaxSize"
-    value     = "2"
-  }
+#   setting {
+#     namespace = "aws:ec2:vpc"
+#     name      = "VPCId"
+#     value     = aws_vpc.vpc.id
+#   }
+#   setting {
+#     namespace = "aws:ec2:vpc"
+#     name      = "Subnets"
+#     value     = join(",", aws_subnet.private_subnets[*].id)
+#   }
+#   setting {
+#     namespace = "aws:ec2:vpc"
+#     name      = "ELBSubnets"
+#     value     = join(",", aws_subnet.public_subnets[*].id)
+#   }
+#   setting {
+#     namespace = "aws:ec2:instances"
+#     name      = "InstanceTypes"
+#     value     = "t3.micro"
+#   }
+#   # setting {
+#   #   namespace = "aws:ec2:vpc"
+#   #   name      = "AssociatePublicIpAddress"
+#   #   value     = true
+#   # }
+#   setting {
+#     namespace = "aws:autoscaling:asg"
+#     name      = "MaxSize"
+#     value     = "2"
+#   }
 
-  setting {
-    namespace = "aws:elbv2:loadbalancer"
-    name      = "IdleTimeout"
-    value     = "60"
-  }
-  setting {
-    namespace = "aws:autoscaling:launchconfiguration"
-    name      = "IamInstanceProfile"
-    value     = aws_iam_instance_profile.ec2_instance_profile.name
-  }
-  setting {
-    namespace = "aws:autoscaling:launchconfiguration"
-    name      = "SecurityGroups"
-    value     = aws_security_group.eb_security_group_web.id
-  }
-  setting {
-    namespace = "aws:elasticbeanstalk:environment"
-    name      = "LoadBalancerType"
-    value     = "application"
-  }
+#   setting {
+#     namespace = "aws:elbv2:loadbalancer"
+#     name      = "IdleTimeout"
+#     value     = "60"
+#   }
+#   setting {
+#     namespace = "aws:autoscaling:launchconfiguration"
+#     name      = "IamInstanceProfile"
+#     value     = aws_iam_instance_profile.ec2_instance_profile.name
+#   }
+#   setting {
+#     namespace = "aws:autoscaling:launchconfiguration"
+#     name      = "SecurityGroups"
+#     value     = aws_security_group.eb_security_group_web.id
+#   }
+#   setting {
+#     namespace = "aws:elasticbeanstalk:environment"
+#     name      = "LoadBalancerType"
+#     value     = "application"
+#   }
 
-  setting {
-    namespace = "aws:elasticbeanstalk:environment"
-    name      = "ServiceRole"
-    value     = aws_iam_role.eb_service_role.name
-  }
+#   setting {
+#     namespace = "aws:elasticbeanstalk:environment"
+#     name      = "ServiceRole"
+#     value     = aws_iam_role.eb_service_role.name
+#   }
 
-  setting {
-    namespace = "aws:elasticbeanstalk:healthreporting:system"
-    name      = "SystemType"
-    value     = "basic"
-  }
+#   setting {
+#     namespace = "aws:elasticbeanstalk:healthreporting:system"
+#     name      = "SystemType"
+#     value     = "basic"
+#   }
 
-  setting {
-    namespace = "aws:elbv2:listener:443"
-    name      = "Protocol"
-    value     = "HTTPS"
-  }
+#   setting {
+#     namespace = "aws:elbv2:listener:443"
+#     name      = "Protocol"
+#     value     = "HTTPS"
+#   }
 
-  setting {
-    namespace = "aws:elbv2:listener:443"
-    name      = "ListenerEnabled"
-    value     = "true"
-  }
+#   setting {
+#     namespace = "aws:elbv2:listener:443"
+#     name      = "ListenerEnabled"
+#     value     = "true"
+#   }
 
-  setting {
-    namespace = "aws:elbv2:listener:80"
-    name      = "DefaultProcess"
-    value     = "default"
-  }
+#   setting {
+#     namespace = "aws:elbv2:listener:80"
+#     name      = "DefaultProcess"
+#     value     = "default"
+#   }
 
-  setting {
-    namespace = "aws:elbv2:listener:80"
-    name      = "Protocol"
-    value     = "HTTP"
-  }
+#   setting {
+#     namespace = "aws:elbv2:listener:80"
+#     name      = "Protocol"
+#     value     = "HTTP"
+#   }
 
-  setting {
-    namespace = "aws:elbv2:listener:80"
-    name      = "ListenerEnabled"
-    value     = "true"
-  }
+#   setting {
+#     namespace = "aws:elbv2:listener:80"
+#     name      = "ListenerEnabled"
+#     value     = "true"
+#   }
 
-  setting {
-    namespace = "aws:elbv2:loadbalancer"
-    name      = "SecurityGroups"
-    value     = aws_security_group.eb_security_group_lb.id
-  }
+#   setting {
+#     namespace = "aws:elbv2:loadbalancer"
+#     name      = "SecurityGroups"
+#     value     = aws_security_group.eb_security_group_lb.id
+#   }
 
-  setting {
-    namespace = "aws:elbv2:listener:443"
-    name      = "SSLCertificateArns"
-    value     = "arn:aws:acm:eu-west-1:574836245203:certificate/d2823834-c26d-48f8-b5f8-841bfef65711" # Replace with your SSL certificate ARN
-  }
+#   setting {
+#     namespace = "aws:elbv2:listener:443"
+#     name      = "SSLCertificateArns"
+#     value     = "arn:aws:acm:eu-west-1:574836245203:certificate/d2823834-c26d-48f8-b5f8-841bfef65711" # Replace with your SSL certificate ARN
+#   }
 
-  # Optional: redirect HTTP to HTTPS
-  # setting {
-  #   namespace = "aws:elbv2:listener:80"
-  #   name      = "Rules"
-  #   value     = "path-pattern / -> forward: 443, path-pattern /* -> redirect: https://api.health.projects.bbdgrad.com#{path}?#{query}"
-  # }
+#   # Optional: redirect HTTP to HTTPS
+#   # setting {
+#   #   namespace = "aws:elbv2:listener:80"
+#   #   name      = "Rules"
+#   #   value     = "path-pattern / -> forward: 443, path-pattern /* -> redirect: https://api.health.projects.bbdgrad.com#{path}?#{query}"
+#   # }
 
-}
+# }
 
 resource "aws_elastic_beanstalk_application" "web_app_api" {
   name        = "${var.project_name}-api-web-app"
@@ -261,7 +261,7 @@ resource "aws_elastic_beanstalk_application" "web_app_api" {
 resource "aws_elastic_beanstalk_environment" "web_env_api" {
   name                = "${var.project_name}-api-web-env"
   application         = aws_elastic_beanstalk_application.web_app_api.name
-  solution_stack_name = "64bit Amazon Linux 2023 v4.3.2 running Docker"
+  solution_stack_name = "64bit Amazon Linux 2023 v4.2.6 running Corretto 21"
   cname_prefix        = "${var.project_name}-api-web"
 
   setting {
