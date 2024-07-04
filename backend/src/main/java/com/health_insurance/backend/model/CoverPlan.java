@@ -13,7 +13,13 @@ import java.math.BigInteger;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "CoverPlan", uniqueConstraints = @UniqueConstraint(name = "uq_persona_id", columnNames = "personaID"))
+@Table(
+        name = "CoverPlan",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uq_persona_id", columnNames = "personaID"),
+                @UniqueConstraint(name = "uq_debit_order_id", columnNames = "debitOrderID")
+        }
+)
 public class CoverPlan {
 
     public CoverPlan(BigInteger personaID, Status status){
@@ -27,6 +33,9 @@ public class CoverPlan {
 
     @Column(name = "personaID", nullable = false)
     private BigInteger personaID;
+
+    @Column(name = "debitOrderID")
+    private String debitOrderID;
 
     @ManyToOne
     @JoinColumn(name = "statusID", nullable = false)
