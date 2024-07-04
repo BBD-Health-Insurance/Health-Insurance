@@ -29,32 +29,32 @@ jobs:
         role-session-name: deploy-backend-session
         aws-region: ${{secrets.AWS_REGION}}
 
-    - name: Generate env.properties
-      run: |
-          cd backend
-          echo "PORT_LOCAL=80" > env.properties 
-          echo "MODE=production" >> env.properties
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME}}" >> env.properties
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD}}" >> env.properties
-          echo "DB_NAME=${{ secrets.DB_NAME}}" >> env.properties
-          echo "DB_ENDPOINT=${{ secrets.DB_ENDPOINT}}" >> env.properties
-          echo "AWS_REGION=${{ secrets.AWS_REGION}}" >> env.properties
-          echo "PORTAL_URL=${{secrets.PORTAL_URL}}" >> env.properties
-          echo "API_URL=${{secrets.API_URL}}" >> env.properties
+    # - name: Generate env.properties
+    #   run: |
+    #       cd backend
+    #       echo "PORT_LOCAL=80" > env.properties 
+    #       echo "MODE=production" >> env.properties
+    #       echo "DB_USERNAME=${{ secrets.DB_USERNAME}}" >> env.properties
+    #       echo "DB_PASSWORD=${{ secrets.DB_PASSWORD}}" >> env.properties
+    #       echo "DB_NAME=${{ secrets.DB_NAME}}" >> env.properties
+    #       echo "DB_ENDPOINT=${{ secrets.DB_ENDPOINT}}" >> env.properties
+    #       echo "AWS_REGION=${{ secrets.AWS_REGION}}" >> env.properties
+    #       echo "PORTAL_URL=${{secrets.PORTAL_URL}}" >> env.properties
+    #       echo "API_URL=${{secrets.API_URL}}" >> env.properties
 
-    - name: Package artifact
-      run: zip -r ./backend.zip env.properties .dockerignore *
-      working-directory: backend
+    # - name: Package artifact
+    #   run: zip -r ./backend.zip env.properties .dockerignore *
+    #   working-directory: backend
 
-    - name: list files
-      run: |
-          cd backend
-          ls -la
+    # - name: list files
+    #   run: |
+    #       cd backend
+    #       ls -la
           
-    - name: Upload artifact to S3
-      run: |
-        cd backend
-        aws s3 cp backend.zip s3://${{ secrets.BUCKET_NAME_API }}/application-${{ github.run_id }}.zip
+    # - name: Upload artifact to S3
+    #   run: |
+    #     cd backend
+    #     aws s3 cp backend.zip s3://${{ secrets.BUCKET_NAME_API }}/application-${{ github.run_id }}.zip
 
   deploy:
     needs: build
