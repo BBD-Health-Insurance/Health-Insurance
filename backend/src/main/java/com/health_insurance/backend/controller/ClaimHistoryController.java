@@ -64,13 +64,6 @@ public class ClaimHistoryController {
         return new ResponseEntity<>(claimHistoryDto, HttpStatus.OK);
     }
 
-    @GetMapping("/test-payment")
-    public ResponseEntity<String> testMakePayment() {
-        ResponseEntity<String> responseEntity = makePayment.createTransaction(100, "HealthInsurance", "HealthCare");
-
-        return responseEntity;
-    }
-
     @PostMapping("/pay-claim")
     public ResponseEntity<List<AddClaimHistoryDto>> payClaim(@RequestBody List<Map<String, Object>> request) {
         List<AddClaimHistoryDto> responseList = new ArrayList<>();
@@ -115,7 +108,9 @@ public class ClaimHistoryController {
                         amountPaid = maxCoverAmount;
                     }
 
-                    ResponseEntity<String> paymentResponse = makePayment.createTransaction(amountPaid.doubleValue(), personaIDStr, personaIDStr);
+                    String creditAccount = "health_care";
+
+                    ResponseEntity<String> paymentResponse = makePayment.createTransaction(creditAccount, amountPaid.doubleValue(), personaIDStr, personaIDStr);
 
                     if (paymentResponse.getStatusCode() == HttpStatus.OK) {
                         ClaimHistory claimHistory = new ClaimHistory();

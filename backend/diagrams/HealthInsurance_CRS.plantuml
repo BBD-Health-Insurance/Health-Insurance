@@ -1,0 +1,135 @@
+@startuml HealthInsurance and Central Revenue Services
+
+title Health Insurance and Central Revenue Services
+
+participant HealthInsuranceAPI as hi
+participant CRS_API as crs
+
+autonumber "<b>[00]"
+
+hi -> crs: Register business for tax
+note left
+  **Method**: POST
+  **URL HOST**: api.mers.projects.bbdgrad.com
+  **URL PATH**: /api/texpayer/business/register
+  **Header**: {"X-Origin": "health_insurance"}
+  **Body**: {"businessName": "health_insurance"}
+end note
+
+alt 200:OK
+  autonumber 2 "<b>[00]"
+  crs -> hi: Response
+  note right
+    **Status**: 200
+    **Body**: {"taxId": tax_UUID}
+  end note
+
+else 
+  autonumber 2 "<b>[00]"
+  crs -> hi: Response
+  note right
+    **Status**: 400 / 416 / 500
+  end note
+end
+
+loop At the end of every month
+  hi -> crs: Get amount owed on tax
+  note left
+    **Method**: Get
+    **URL HOST**: api.mers.projects.bbdgrad.com
+    **URL PATH**: /api/taxcalculator/calculate
+    **Header**: {"X-Origin": "health_insurance"}
+    **QueryParameters**: 
+      {
+        amount: 100024.00
+        taxType: "INCOME"
+      }
+  end note
+
+  alt 200:OK
+    autonumber 2 "<b>[00]"
+    crs -> hi: Get Taxable Amount
+    note right
+      **Status**: 200
+      **Body**: 
+        {
+          "taxableAmount": 0,
+          "taxAmount": 0
+        }
+    end note
+
+    hi -> crs: Create Tax Invoice
+    note left
+      **Method**: Post
+      **URL HOST**: api.mers.projects.bbdgrad.com
+      **URL PATH**: /api/taxpayment/createTaxInvoice
+      **Header**: {"X-Origin": "health_insurance"}
+      **Body**: 
+        {
+          "taxId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "taxType": "INCOME",
+          "amount": taxableAmount
+        }
+    end note
+
+    alt 200:OK
+      autonumber 4 "<b>[00]"
+      crs -> hi: Get PaymentID Amount
+      note right
+        **Status**: 200
+        **Body**: 
+          {
+            "paymentId": 0,
+            "amountDue": 0,
+            "dueTime": {
+              "days": 0,
+              "hours": 0,
+              "minutes": 0,
+              "seconds": 0
+            }
+          }
+      end note
+
+      hi -> crs: Submit notice of payment
+      note left
+      **Method**: Post
+      **URL HOST**: api.mers.projects.bbdgrad.com
+      **URL PATH**: /api/taxpayment/submitNoticeOfPayment
+      **Header**: {"X-Origin": "health_insurance"}
+      **Body**: 
+        {
+          "taxId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "paymentId": 0,
+          "callbackURL": "https://api.health.projects.bbdgrad.com/tax-callback"
+        }
+      end note
+
+    crs -> hi: Response
+
+    crs --> hi: Return response
+    note right
+      **Method**: Post
+      **URL HOST**: https://api.health.projects.bbdgrad.com
+      **URL PATH**: /tax-callback
+      **Body**: {"result": "string"}
+    end note
+
+    else 
+      autonumber 4 "<b>[00]"
+      crs -> hi: Response
+      note right
+        **Status**: 400 / 403 / 404
+      end note
+    end
+
+  else 
+    autonumber 2 "<b>[00]"
+    crs -> hi: Response
+    note right
+      **Status**: 400 / 409
+    end note
+  end
+
+end
+
+@enduml
