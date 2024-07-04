@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './navBar';
-import { ClaimHistory, Welcome, Home, ProtectedRoute } from './components';
+import { ClaimHistory, Welcome, Home, Callback } from './components';
 
 const App = () => {
 
@@ -29,6 +29,7 @@ const App = () => {
           <Routes>
             <Route path="/claim-history" element={<ClaimHistory/>} />
             <Route path="/home" element={<Home/>} />
+            <Route path="/callback" element={<Callback/>} />
             <Route path="/" element={<Welcome/>} />
           </Routes>
         </div>

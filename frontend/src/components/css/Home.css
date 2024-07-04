@@ -1,0 +1,54 @@
+.home-container {
+  text-align: center;
+  padding: 50px;
+}
+
+.home-heading {
+  font-size: 2.5em;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.home-subtext {
+  font-size: 1.2em;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.home-info-section {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.home-info-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 250px;
+}
+
+.info-title {
+  font-size: 1.5em;
+  color: #359aff;
+  margin-bottom: 10px;
+}
+
+.info-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.info-list li {
+  margin: 5px 0;
+}
+
+.info-list a {
+  text-decoration: none;
+  color: #007BFF;
+}
+
+.info-list a:hover {
+  text-decoration: underline;
+}

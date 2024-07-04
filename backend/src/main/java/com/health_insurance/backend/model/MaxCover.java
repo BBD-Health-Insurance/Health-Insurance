@@ -15,6 +15,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(name = "MaxCover")
 public class MaxCover {
+
+    public MaxCover(String maxCoverAmount){
+        this.setMaxCover(new BigDecimal(maxCoverAmount));
+    }
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

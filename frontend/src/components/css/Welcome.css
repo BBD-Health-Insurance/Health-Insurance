@@ -1,0 +1,44 @@
+.welcome-container {
+  text-align: center;
+  padding: 50px;
+}
+
+.welcome-heading {
+  font-size: 2.5em;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.welcome-subtext {
+  font-size: 1.2em;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.welcome-info-section {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.welcome-info-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  margin: 10px;
+}
+
+.info-title {
+  font-size: 1.5em;
+  color: #359aff;
+  margin-bottom: 10px;
+}

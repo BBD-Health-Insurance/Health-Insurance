@@ -19,7 +19,9 @@ public class MaxCoverService {
     public boolean updateMaxCover(BigInteger newMaxCover) {
         Optional<MaxCover> optionalMaxCover = maxCoverRepository.findAll().stream().findFirst();
         if (optionalMaxCover.isEmpty()){
-            return false;
+            MaxCover createdMaxCover = new MaxCover("10");
+            maxCoverRepository.save(createdMaxCover);
+            optionalMaxCover = maxCoverRepository.findAll().stream().findFirst();
         }
 
         MaxCover maxCover = optionalMaxCover.get();
