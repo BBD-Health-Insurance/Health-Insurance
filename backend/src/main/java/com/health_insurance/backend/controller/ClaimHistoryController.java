@@ -69,7 +69,7 @@ public class ClaimHistoryController {
         List<AddClaimHistoryDto> responseList = new ArrayList<>();
 
         try {
-            Optional<MaxCover> maxCoverOptional = maxCoverRepository.findById(0L);
+            Optional<MaxCover> maxCoverOptional = maxCoverRepository.findAll().stream().findFirst();
             if (!maxCoverOptional.isPresent()) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -113,16 +113,15 @@ public class ClaimHistoryController {
                     ResponseEntity<String> paymentResponse = makePayment.createTransaction(creditAccount, amountPaid.doubleValue(), personaIDStr, personaIDStr);
 
                     if (paymentResponse.getStatusCode() == HttpStatus.OK) {
-                        ClaimHistory claimHistory = new ClaimHistory();
-                        claimHistory.setCoverPlan(coverPlan);
-                        claimHistory.setClaimAmount(claimAmount);
-                        claimHistory.setAmountPaid(amountPaid);
-                        claimHistory.setClaimPersonaID(personaID);
-                        claimHistory.setTimeStamp(new Date());
+                        try {
+                            ClaimHistory claimHistory = new ClaimHistory(coverPlan, claimAmount, amountPaid, personaID);
+                            claimHistoryRepository.save(claimHistory);
 
-                        claimHistoryRepository.save(claimHistory);
-
-                        responseList.add(new AddClaimHistoryDto("successful"));
+                            responseList.add(new AddClaimHistoryDto("successful"));
+                        }
+                        catch (Exception e){
+                            responseList.add(new AddClaimHistoryDto("failed saving history"));
+                        }
                     } else {
                         responseList.add(new AddClaimHistoryDto("unsuccessful - cannot make payment"));
                     }

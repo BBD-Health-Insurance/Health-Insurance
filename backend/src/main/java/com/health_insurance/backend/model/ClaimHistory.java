@@ -1,15 +1,15 @@
 package com.health_insurance.backend.model;
 
-import java.math.BigDecimal;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -18,10 +18,18 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "ClaimHistory")
 public class ClaimHistory {
-    
+    public ClaimHistory(CoverPlan coverPlan, BigDecimal claimAmount, BigDecimal amountPaid, BigInteger personaID){
+        this.claimHistoryID = UUID.randomUUID().toString();
+        this.coverPlan = coverPlan;
+        this.claimAmount = claimAmount;
+        this.amountPaid = amountPaid;
+        this.claimPersonaID = personaID;
+        this.timeStamp = new Date();
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long claimHistoryID;
+    @Column(name = "claimHistoryID", nullable = false, length = 36)
+    private String claimHistoryID;
 
     @ManyToOne
     @JoinColumn(name = "coverPlanID", nullable = false)
