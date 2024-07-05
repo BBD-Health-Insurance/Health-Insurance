@@ -156,6 +156,11 @@ public class PersonaInformationController {
                         reasons.add("unknown structure");
                         newAdults.add(new ResponseStatusDto(ResponseStatusDto.responseUnsuccessful, reasons));
                     }
+
+                    if (itemsNode.isEmpty()){
+                        reasons.add("Debit orders weren't registered");
+                        newAdults.add(new ResponseStatusDto(ResponseStatusDto.responseUnsuccessful, reasons));
+                    }
                 }
                 else {
                     reasons.add("Failed to setup debit orders");
@@ -165,40 +170,52 @@ public class PersonaInformationController {
 
             // Updating claims to dead, if they die.
             List<Map<String, Object>> deathsList = (List<Map<String, Object>>) request.get("deaths");
-            for (Map<String, Object> death : deathsList) {
-                List<String> reasons = new ArrayList<>();
-                BigInteger personaID = new BigInteger(String.valueOf(death.get("deceased")));
+            if (deathsList != null){
+                for (Map<String, Object> death : deathsList) {
+                    List<String> reasons = new ArrayList<>();
+                    BigInteger personaID = new BigInteger(String.valueOf(death.get("deceased")));
 
-                Optional<CoverPlan> coverPlan = coverPlanRepository.findByPersonaID(personaID);
+                    Optional<CoverPlan> coverPlan = coverPlanRepository.findByPersonaID(personaID);
 
-                if (coverPlan.isPresent()){
-                    CoverPlan plan = coverPlan.get();
-                    plan.setStatus(deadStatus);
-                    coverPlanRepository.save(plan);
+                    if (coverPlan.isPresent()){
+                        CoverPlan plan = coverPlan.get();
+                        plan.setStatus(deadStatus);
+                        coverPlanRepository.save(plan);
 
-                    deaths.add(new ResponseStatusDto(ResponseStatusDto.responseSuccessful));
+                        deaths.add(new ResponseStatusDto(ResponseStatusDto.responseSuccessful));
 
-                    // Updating the debit order
-                    ObjectMapper mapper = new ObjectMapper();
-                    ObjectNode debitOrder = mapper.createObjectNode();
-                    debitOrder.put("debitAccountName", personaID.toString());
-                    debitOrder.put("creditAccountName", healthInsuranceName);
-                    debitOrder.put("debitRef", "Health Insurance Premium");
-                    debitOrder.put("creditRef", "Premium for " + personaID);
-                    debitOrder.put("amount", 0);
+                        String debitOrderID = plan.getDebitOrderID();
 
-                    String url = commercialBankURL + cancelDebitOrder + personaID;
-                    ResponseEntity<String> commercialResponse = makeCallToCommercialBank(url, debitOrder, HttpMethod.PUT);
-                    HttpStatusCode statusCode = commercialResponse.getStatusCode();
+                        if (debitOrderID != null){
+                            // Updating the debit order
+                            ObjectMapper mapper = new ObjectMapper();
+                            ObjectNode debitOrder = mapper.createObjectNode();
+                            debitOrder.put("debitAccountName", personaID.toString());
+                            debitOrder.put("creditAccountName", healthInsuranceName);
+                            debitOrder.put("debitRef", "Health Insurance Premium");
+                            debitOrder.put("creditRef", "Premium for " + personaID);
+                            debitOrder.put("amount", 0);
 
-                    if (statusCode != HttpStatus.OK){
-                        reasons.add("Failed to cancel debit order for " + personaID);
+                            String url = commercialBankURL + cancelDebitOrder + debitOrderID;
+                            ResponseEntity<String> commercialResponse = makeCallToCommercialBank(url, debitOrder, HttpMethod.PUT);
+                            HttpStatusCode statusCode = commercialResponse.getStatusCode();
+
+                            if (statusCode != HttpStatus.OK){
+                                reasons.add("Failed to cancel debit order for " + personaID);
+                                deaths.add(new ResponseStatusDto(ResponseStatusDto.responseUnsuccessful, reasons));
+                            }
+                        }
+                        else {
+                            reasons.add("Persona " + personaID + " did not have a debit order setup.");
+                            reasons.add("No cancellation needed");
+                            deaths.add(new ResponseStatusDto(ResponseStatusDto.responseUnsuccessful, reasons));
+                        }
+
+                    }
+                    else {
+                        reasons.add("Persona: " + personaID.toString() + " doesn't have insurance");
                         deaths.add(new ResponseStatusDto(ResponseStatusDto.responseUnsuccessful, reasons));
                     }
-                }
-                else {
-                    reasons.add("Persona: " + personaID.toString() + " doesn't have insurance");
-                    deaths.add(new ResponseStatusDto(ResponseStatusDto.responseUnsuccessful, reasons));
                 }
             }
 
